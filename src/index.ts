@@ -59,8 +59,8 @@ function getSmallModel(runtime: IAgentRuntime): string {
 function getLargeModel(runtime: IAgentRuntime): string {
   return (
     getSetting(runtime, 'GOOGLE_LARGE_MODEL') ??
-    getSetting(runtime, 'LARGE_MODEL', 'gemini-2.0-flash-001') ??
-    'gemini-2.0-flash-001'
+    getSetting(runtime, 'LARGE_MODEL', 'gemini-2.5-pro-preview-03-25') ??
+    'gemini-2.5-pro-preview-03-25'
   );
 }
 
@@ -73,8 +73,8 @@ function getLargeModel(runtime: IAgentRuntime): string {
 function getImageModel(runtime: IAgentRuntime): string {
   return (
     getSetting(runtime, 'GOOGLE_IMAGE_MODEL') ??
-    getSetting(runtime, 'IMAGE_MODEL', 'gemini-2.0-flash-001') ??
-    'gemini-2.0-flash-001'
+    getSetting(runtime, 'IMAGE_MODEL', 'gemini-2.5-pro-preview-03-25') ??
+    'gemini-2.5-pro-preview-03-25'
   );
 }
 
@@ -239,6 +239,13 @@ async function generateObjectByModelType(
 /**
  * Defines the Google Generative AI plugin with its name, description, and configuration options.
  * @type {Plugin}
+ *
+ * Available models as of March 2025:
+ * - gemini-2.0-flash-001: Fast, efficient model for everyday tasks
+ * - gemini-2.5-pro-exp-03-25: Latest experimental model with advanced reasoning (March 25, 2025)
+ * - gemini-2.5-pro-preview-05-06: Preview version from Google I/O 2025
+ * - gemini-2.5-pro: General model name for Gemini 2.5 Pro
+ * - text-embedding-004: For text embeddings
  */
 export const googleGenAIPlugin: Plugin = {
   name: 'google-genai',
