@@ -293,7 +293,14 @@ export const googleGenAIPlugin: Plugin = {
   models: {
     [ModelType.TEXT_SMALL]: async (
       runtime: IAgentRuntime,
-      { prompt, stopSequences = [] }: GenerateTextParams
+      {
+        prompt,
+        stopSequences = [],
+        maxTokens = 8192,
+        temperature = 0.7,
+        frequencyPenalty = 0.7,
+        presencePenalty = 0.7,
+      }: GenerateTextParams
     ) => {
       const genAI = createGoogleGenAI(runtime);
       if (!genAI) {
@@ -301,8 +308,6 @@ export const googleGenAIPlugin: Plugin = {
       }
 
       const modelName = getSmallModel(runtime);
-      const temperature = 0.7;
-      const maxOutputTokens = 8192;
 
       logger.log(`[TEXT_SMALL] Using model: ${modelName}`);
       logger.debug(`[TEXT_SMALL] Prompt: ${prompt}`);
@@ -316,7 +321,7 @@ export const googleGenAIPlugin: Plugin = {
             temperature,
             topK: 40,
             topP: 0.95,
-            maxOutputTokens,
+            maxOutputTokens: maxTokens,
             stopSequences,
             safetySettings: getSafetySettings(),
             ...(systemInstruction && { systemInstruction }),
