@@ -17,7 +17,7 @@ async function generateObjectByModelType(
   params: ObjectGenerationParams,
   modelType: string,
   getModelFn: (runtime: IAgentRuntime) => string
-): Promise<{ result: any; usage?: { inputTokens: number; outputTokens: number } }> {
+): Promise<any> {
   const genAI = createGoogleGenAI(runtime);
   if (!genAI) {
     throw new Error('Google Generative AI client not initialized');
@@ -62,14 +62,7 @@ async function generateObjectByModelType(
 
     try {
       const parsedResult = JSON.parse(text);
-      // Return with usage metadata for token tracking
-      return {
-        result: parsedResult,
-        usage: {
-          inputTokens: promptTokens,
-          outputTokens: completionTokens,
-        },
-      };
+      return parsedResult;
     } catch (parseError) {
       logger.error(
         `Failed to parse JSON response: ${parseError instanceof Error ? parseError.message : String(parseError)}`
@@ -79,13 +72,7 @@ async function generateObjectByModelType(
       if (jsonMatch) {
         try {
           const extractedResult = JSON.parse(jsonMatch[0]);
-          return {
-            result: extractedResult,
-            usage: {
-              inputTokens: promptTokens,
-              outputTokens: completionTokens,
-            },
-          };
+          return extractedResult;
         } catch (secondParseError) {
           throw new Error('Failed to parse JSON from response');
         }

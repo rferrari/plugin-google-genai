@@ -58,14 +58,7 @@ export async function handleTextSmall(
       totalTokens: promptTokens + completionTokens,
     });
 
-    // Return with usage metadata for token tracking
-    return {
-      result: text,
-      usage: {
-        inputTokens: promptTokens,
-        outputTokens: completionTokens,
-      },
-    };
+    return text;
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     logger.error(`[TEXT_SMALL] Error: ${message}`);
@@ -122,14 +115,7 @@ export async function handleTextLarge(
       totalTokens: promptTokens + completionTokens,
     });
 
-    // Return with usage metadata for token tracking
-    return {
-      result: text,
-      usage: {
-        inputTokens: promptTokens,
-        outputTokens: completionTokens,
-      },
-    };
+    return text;
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : String(error);
     logger.error(`[TEXT_LARGE] Error: ${message}`);
