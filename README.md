@@ -38,6 +38,7 @@ Add the plugin to your character configuration:
 ## Environment Variables
 
 - `GOOGLE_GEMINI_API_KEY` (required): Your Google Gemini API key
+- `GEMINI_API_KEY` (fallback): Another fallback API key
 - `GOOGLE_GENERATIVE_AI_API_KEY` (legacy): Fallback API key
 - `GOOGLE_SMALL_MODEL` (optional): Override small model (default: `gemini-3-flash`)
 - `GOOGLE_LARGE_MODEL` (optional): Override large model (default: `gemini-3.1-pro`)

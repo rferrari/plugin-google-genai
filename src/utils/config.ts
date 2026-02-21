@@ -26,9 +26,10 @@ export function getSetting(
  */
 export function getApiKey(runtime: IAgentRuntime): string | undefined {
   return (
-    getSetting(runtime, 'GOOGLE_GEMINI_API_KEY') ??
-    getSetting(runtime, 'GEMINI_API_KEY') ??
-    getSetting(runtime, 'GOOGLE_GENERATIVE_AI_API_KEY')
+    getSetting(runtime, 'GOOGLE_GEMINI_API_KEY') ||
+    getSetting(runtime, 'GEMINI_API_KEY') ||
+    getSetting(runtime, 'GOOGLE_GENERATIVE_AI_API_KEY') ||
+    undefined
   );
 }
 

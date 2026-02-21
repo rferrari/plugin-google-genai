@@ -26,11 +26,11 @@ export * from './types';
  * @type {Plugin}
  *
  * Available models as of February 2026:
- * - gemini-3-flash: Fast, efficient model for everyday tasks (Latest Flash)
- * - gemini-3.1-pro: Advanced reasoning and complex problem-solving (Latest Pro)
+ * - gemini-3-flash-preview: Fast, efficient model for everyday tasks (Latest Flash)
+ * - gemini-3.1-pro-preview: Advanced reasoning and complex problem-solving (Latest Pro)
  * - gemini-3-deep-think: Designed for science, research, and engineering
  * - gemini-2.5-pro: General model name for Gemini 2.5 Pro
- * - text-embedding-004: For text embeddings
+ * - gemini-embedding-001: For text embeddings
  */
 export const googleGenAIPlugin: Plugin = {
   name: 'google-genai',

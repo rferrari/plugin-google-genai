@@ -8,7 +8,9 @@ config({ path: resolve(process.cwd(), '..', '.env') });
 async function listModels() {
     const apiKey = process.env.GOOGLE_GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY;
     if (!apiKey) {
-        console.error('API key not found');
+        console.error(
+            'API key not found. Set GOOGLE_GEMINI_API_KEY (or legacy GOOGLE_GENERATIVE_AI_API_KEY) in your environment.'
+        );
         return;
     }
 
@@ -17,7 +19,7 @@ async function listModels() {
         const modelList = await genAI.models.list();
         console.log('Available models:');
         for await (const model of modelList) {
-            console.log(`- ${model.name} (Supported: ${model.supportedGenerationMethods})`);
+            console.log(`- ${model.name} (${model.description || 'No description'})`);
         }
     } catch (error) {
         console.error('Error listing models:', error);

@@ -19,8 +19,8 @@ export async function handleTextEmbedding(
   // Handle null case for initialization
   if (params === null) {
     logger.debug('Creating test embedding for initialization');
-    // Return 768-dimensional vector for text-embedding-004
-    const dimension = 768;
+    // Return 3072-dimensional vector for gemini-embedding-001
+    const dimension = 3072;
     const testVector = Array(dimension).fill(0);
     testVector[0] = 0.1;
     return testVector;
@@ -34,7 +34,7 @@ export async function handleTextEmbedding(
     text = params.text;
   } else {
     logger.warn('Invalid input format for embedding');
-    const dimension = 768;
+    const dimension = 3072;
     const fallbackVector = Array(dimension).fill(0);
     fallbackVector[0] = 0.2;
     return fallbackVector;
@@ -42,7 +42,7 @@ export async function handleTextEmbedding(
 
   if (!text.trim()) {
     logger.warn('Empty text for embedding');
-    const dimension = 768;
+    const dimension = 3072;
     const emptyVector = Array(dimension).fill(0);
     emptyVector[0] = 0.3;
     return emptyVector;
@@ -71,7 +71,7 @@ export async function handleTextEmbedding(
     const message = error instanceof Error ? error.message : String(error);
     logger.error(`Error generating embedding: ${message}`);
     // Return error vector
-    const dimension = 768;
+    const dimension = 3072;
     const errorVector = Array(dimension).fill(0);
     errorVector[0] = 0.6;
     return errorVector;

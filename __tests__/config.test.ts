@@ -35,8 +35,10 @@ describe('Google Generative AI Plugin Configuration', () => {
     // Temporarily clear env to force warning
     const originalKey = process.env.GOOGLE_GEMINI_API_KEY;
     const originalLegacyKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    const originalGeminiKey = process.env.GEMINI_API_KEY;
     delete process.env.GOOGLE_GEMINI_API_KEY;
     delete process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    delete process.env.GEMINI_API_KEY;
 
     try {
       // Create a mock runtime with no API key
@@ -55,8 +57,9 @@ describe('Google Generative AI Plugin Configuration', () => {
       });
     } finally {
       // Restore env
-      if (originalKey) process.env.GOOGLE_GEMINI_API_KEY = originalKey;
-      if (originalLegacyKey) process.env.GOOGLE_GENERATIVE_AI_API_KEY = originalLegacyKey;
+      if (originalKey !== undefined) process.env.GOOGLE_GEMINI_API_KEY = originalKey;
+      if (originalLegacyKey !== undefined) process.env.GOOGLE_GENERATIVE_AI_API_KEY = originalLegacyKey;
+      if (originalGeminiKey !== undefined) process.env.GEMINI_API_KEY = originalGeminiKey;
     }
   });
 
