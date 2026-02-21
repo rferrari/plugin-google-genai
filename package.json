@@ -1,13 +1,13 @@
 {
   "name": "@elizaos/plugin-google-genai",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "type": "module",
   "main": "dist/index.js",
   "module": "dist/index.js",
   "types": "dist/index.d.ts",
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/elizaos-plugins/plugin-google-genai.git"
+    "url": "git+https://github.com/elizaos-plugins/plugin-google-gemini.git"
   },
   "exports": {
     "./package.json": "./package.json",
@@ -23,7 +23,7 @@
   ],
   "dependencies": {
     "@elizaos/core": "^1.6.3",
-    "@google/genai": "^1.5.1",
+    "@google/genai": "^1.42.0",
     "undici": "^7.9.0"
   },
   "devDependencies": {
@@ -49,59 +49,65 @@
   "agentConfig": {
     "pluginType": "elizaos:plugin:1.0.0",
     "pluginParameters": {
+      "GOOGLE_GEMINI_API_KEY": {
+        "type": "string",
+        "description": "API key for Google Gemini obtained from Google AI Studio.",
+        "required": true,
+        "sensitive": true
+      },
       "GOOGLE_GENERATIVE_AI_API_KEY": {
         "type": "string",
-        "description": "API key for Google Generative AI (Gemini) obtained from Google AI Studio.",
-        "required": true,
+        "description": "Legacy API key for Google Generative AI (Gemini) obtained from Google AI Studio.",
+        "required": false,
         "sensitive": true
       },
       "GOOGLE_EMBEDDING_MODEL": {
         "type": "string",
-        "description": "Overrides the default text embedding model used by Google Generative AI.",
+        "description": "Overrides the default text embedding model used by Google Gemini.",
         "required": false,
-        "default": "text-embedding-004",
+        "default": "gemini-embedding-001",
         "sensitive": false
       },
       "GOOGLE_IMAGE_MODEL": {
         "type": "string",
-        "description": "Overrides the default image analysis model used by Google Generative AI.",
+        "description": "Overrides the default image analysis model used by Google Gemini.",
         "required": false,
-        "default": "gemini-2.0-flash-001",
+        "default": "gemini-3-flash-preview",
         "sensitive": false
       },
       "GOOGLE_SMALL_MODEL": {
         "type": "string",
         "description": "Overrides the default small language model used for fast text/object generation.",
         "required": false,
-        "default": "gemini-2.0-flash-001",
+        "default": "gemini-3-flash-preview",
         "sensitive": false
       },
       "GOOGLE_LARGE_MODEL": {
         "type": "string",
         "description": "Overrides the default large language model used for complex text/object generation.",
         "required": false,
-        "default": "gemini-2.0-flash-001",
+        "default": "gemini-3.1-pro-preview",
         "sensitive": false
       },
       "SMALL_MODEL": {
         "type": "string",
         "description": "General fallback environment variable for the small model name when GOOGLE_SMALL_MODEL is not set.",
         "required": false,
-        "default": "gemini-2.0-flash-001",
+        "default": "gemini-3-flash-preview",
         "sensitive": false
       },
       "LARGE_MODEL": {
         "type": "string",
         "description": "General fallback environment variable for the large model name when GOOGLE_LARGE_MODEL is not set.",
         "required": false,
-        "default": "gemini-2.0-flash-001",
+        "default": "gemini-3.1-pro-preview",
         "sensitive": false
       },
       "IMAGE_MODEL": {
         "type": "string",
         "description": "General fallback environment variable for the image model name when GOOGLE_IMAGE_MODEL is not set.",
         "required": false,
-        "default": "gemini-2.0-flash-001",
+        "default": "gemini-3-flash-preview",
         "sensitive": false
       }
     }

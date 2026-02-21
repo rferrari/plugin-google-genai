@@ -1,7 +1,7 @@
 import type { IAgentRuntime, GenerateTextParams } from '@elizaos/core';
 import { logger, ModelType } from '@elizaos/core';
 import {
-  createGoogleGenAI,
+  createGoogleGemini,
   getSafetySettings,
   getSmallModel,
   getLargeModel,
@@ -20,9 +20,9 @@ export async function handleTextSmall(
     presencePenalty = 0.7,
   }: GenerateTextParams
 ) {
-  const genAI = createGoogleGenAI(runtime);
+  const genAI = createGoogleGemini(runtime);
   if (!genAI) {
-    throw new Error('Google Generative AI client not initialized');
+    throw new Error('Google Gemini client not initialized');
   }
 
   const modelName = getSmallModel(runtime);
@@ -77,9 +77,9 @@ export async function handleTextLarge(
     presencePenalty = 0.7,
   }: GenerateTextParams
 ) {
-  const genAI = createGoogleGenAI(runtime);
+  const genAI = createGoogleGemini(runtime);
   if (!genAI) {
-    throw new Error('Google Generative AI client not initialized');
+    throw new Error('Google Gemini client not initialized');
   }
 
   const modelName = getLargeModel(runtime);
