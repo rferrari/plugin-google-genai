@@ -1,15 +1,15 @@
 import type { IAgentRuntime, ImageDescriptionParams } from '@elizaos/core';
 import { logger } from '@elizaos/core';
 import { fetch } from 'undici';
-import { createGoogleGenAI, getSafetySettings, getImageModel } from '../utils/config';
+import { createGoogleGemini, getSafetySettings, getImageModel } from '../utils/config';
 
 export async function handleImageDescription(
   runtime: IAgentRuntime,
   params: ImageDescriptionParams | string
 ) {
-  const genAI = createGoogleGenAI(runtime);
+  const genAI = createGoogleGemini(runtime);
   if (!genAI) {
-    throw new Error('Google Generative AI client not initialized');
+    throw new Error('Google Gemini client not initialized');
   }
 
   let imageUrl: string;

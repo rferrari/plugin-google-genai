@@ -14,17 +14,22 @@ export function getSetting(
   key: string,
   defaultValue?: string
 ): string | undefined {
-  return runtime.getSetting(key) ?? process.env[key] ?? defaultValue;
+  const value = runtime.getSetting(key);
+  return value !== undefined && value !== null ? String(value) : (process.env[key] ?? defaultValue);
 }
 
 /**
- * Helper function to get the API key for Google AI
+ * Helper function to get the API key for Google Gemini
  *
  * @param runtime The runtime context
  * @returns The configured API key
  */
 export function getApiKey(runtime: IAgentRuntime): string | undefined {
-  return getSetting(runtime, 'GOOGLE_GENERATIVE_AI_API_KEY');
+  return (
+    getSetting(runtime, 'GOOGLE_GEMINI_API_KEY') ??
+    getSetting(runtime, 'GEMINI_API_KEY') ??
+    getSetting(runtime, 'GOOGLE_GENERATIVE_AI_API_KEY')
+  );
 }
 
 /**
@@ -36,8 +41,7 @@ export function getApiKey(runtime: IAgentRuntime): string | undefined {
 export function getSmallModel(runtime: IAgentRuntime): string {
   return (
     getSetting(runtime, 'GOOGLE_SMALL_MODEL') ??
-    getSetting(runtime, 'SMALL_MODEL', 'gemini-2.0-flash-001') ??
-    'gemini-2.0-flash-001'
+    'gemini-3-flash-preview'
   );
 }
 
@@ -50,8 +54,7 @@ export function getSmallModel(runtime: IAgentRuntime): string {
 export function getLargeModel(runtime: IAgentRuntime): string {
   return (
     getSetting(runtime, 'GOOGLE_LARGE_MODEL') ??
-    getSetting(runtime, 'LARGE_MODEL', 'gemini-2.5-pro-preview-03-25') ??
-    'gemini-2.5-pro-preview-03-25'
+    'gemini-3.1-pro-preview'
   );
 }
 
@@ -64,8 +67,7 @@ export function getLargeModel(runtime: IAgentRuntime): string {
 export function getImageModel(runtime: IAgentRuntime): string {
   return (
     getSetting(runtime, 'GOOGLE_IMAGE_MODEL') ??
-    getSetting(runtime, 'IMAGE_MODEL', 'gemini-2.5-pro-preview-03-25') ??
-    'gemini-2.5-pro-preview-03-25'
+    'gemini-3-flash-preview'
   );
 }
 
@@ -77,15 +79,16 @@ export function getImageModel(runtime: IAgentRuntime): string {
  */
 export function getEmbeddingModel(runtime: IAgentRuntime): string {
   return (
-    getSetting(runtime, 'GOOGLE_EMBEDDING_MODEL', 'text-embedding-004') ?? 'text-embedding-004'
+    getSetting(runtime, 'GOOGLE_EMBEDDING_MODEL') ??
+    'gemini-embedding-001'
   );
 }
 
 /**
- * Create a Google Generative AI client instance with proper configuration
+ * Create a Google Gemini client instance with proper configuration
  *
  * @param runtime The runtime context
- * @returns Configured Google Generative AI instance
+ * @returns Configured Google Gemini instance
  */
 export function createGoogleGenAI(runtime: IAgentRuntime): GoogleGenAI | null {
   const apiKey = getApiKey(runtime);
@@ -96,6 +99,11 @@ export function createGoogleGenAI(runtime: IAgentRuntime): GoogleGenAI | null {
 
   return new GoogleGenAI({ apiKey });
 }
+
+/**
+ * Modernized alias for client factory
+ */
+export const createGoogleGemini = createGoogleGenAI;
 
 /**
  * Convert safety settings to Google format

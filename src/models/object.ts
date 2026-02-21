@@ -1,7 +1,7 @@
 import type { IAgentRuntime, ObjectGenerationParams, ModelTypeName } from '@elizaos/core';
 import { logger } from '@elizaos/core';
 import {
-  createGoogleGenAI,
+  createGoogleGemini,
   getSafetySettings,
   getSmallModel,
   getLargeModel,
@@ -18,9 +18,9 @@ async function generateObjectByModelType(
   modelType: string,
   getModelFn: (runtime: IAgentRuntime) => string
 ): Promise<any> {
-  const genAI = createGoogleGenAI(runtime);
+  const genAI = createGoogleGemini(runtime);
   if (!genAI) {
-    throw new Error('Google Generative AI client not initialized');
+    throw new Error('Google Gemini client not initialized');
   }
 
   const modelName = getModelFn(runtime);

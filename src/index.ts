@@ -16,26 +16,27 @@ import {
   handleObjectSmall,
   handleObjectLarge,
 } from './models';
-import { getApiKey } from './utils/config';
+import { createGoogleGemini, getApiKey } from './utils/config';
 import { GoogleGenAI } from '@google/genai';
 
 export * from './types';
 
 /**
- * Defines the Google Generative AI plugin with its name, description, and configuration options.
+ * Defines the Google Gemini plugin with its name, description, and configuration options.
  * @type {Plugin}
  *
- * Available models as of March 2025:
- * - gemini-2.0-flash-001: Fast, efficient model for everyday tasks
- * - gemini-2.5-pro-exp-03-25: Latest experimental model with advanced reasoning (March 25, 2025)
- * - gemini-2.5-pro-preview-05-06: Preview version from Google I/O 2025
+ * Available models as of February 2026:
+ * - gemini-3-flash: Fast, efficient model for everyday tasks (Latest Flash)
+ * - gemini-3.1-pro: Advanced reasoning and complex problem-solving (Latest Pro)
+ * - gemini-3-deep-think: Designed for science, research, and engineering
  * - gemini-2.5-pro: General model name for Gemini 2.5 Pro
  * - text-embedding-004: For text embeddings
  */
 export const googleGenAIPlugin: Plugin = {
   name: 'google-genai',
-  description: 'Google Generative AI plugin for Gemini models',
+  description: 'Google Generative AI plugin for advanced AI models',
   config: {
+    GOOGLE_GEMINI_API_KEY: process.env.GOOGLE_GEMINI_API_KEY,
     GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
     GOOGLE_SMALL_MODEL: process.env.GOOGLE_SMALL_MODEL,
     GOOGLE_LARGE_MODEL: process.env.GOOGLE_LARGE_MODEL,
@@ -47,7 +48,7 @@ export const googleGenAIPlugin: Plugin = {
   },
   async init(_config, runtime) {
     // Note: We intentionally don't await here because ElizaOS expects
-    // the init method to return quickly. The initializeGoogleGenAI function
+    // the init method to return quickly. The initializeGoogleGemini function
     // performs background validation and logging.
     initializeGoogleGenAI(_config, runtime);
   },
@@ -79,14 +80,14 @@ export const googleGenAIPlugin: Plugin = {
   },
   tests: [
     {
-      name: 'google_genai_plugin_tests',
+      name: 'google_gemini_plugin_tests',
       tests: [
         {
           name: 'google_test_api_key_validation',
           fn: async (runtime: IAgentRuntime) => {
             const apiKey = getApiKey(runtime);
             if (!apiKey) {
-              throw new Error('GOOGLE_GENERATIVE_AI_API_KEY not set');
+              throw new Error('GOOGLE_GEMINI_API_KEY not set');
             }
             const genAI = new GoogleGenAI({ apiKey });
             const modelList = await genAI.models.list();
@@ -196,7 +197,7 @@ export const googleGenAIPlugin: Plugin = {
                 schema,
               });
 
-              logger.log('Generated object:', result);
+              logger.log('Generated object:', JSON.stringify(result));
 
               if (!result.name || !result.age || !result.hobbies) {
                 throw new Error('Generated object missing required fields');

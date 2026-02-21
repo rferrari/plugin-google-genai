@@ -25,17 +25,22 @@ export function initializeGoogleGenAI(_config: any, runtime: IAgentRuntime) {
         for await (const model of modelList) {
           models.push(model);
         }
-        logger.log(`Google AI API key validated successfully. Available models: ${models.length}`);
+        logger.log(`Google Generative AI API key validated successfully. Available models: ${models.length}`);
       } catch (fetchError: unknown) {
         const message = fetchError instanceof Error ? fetchError.message : String(fetchError);
-        logger.warn(`Error validating Google AI API key: ${message}`);
-        logger.warn('Google AI functionality will be limited until a valid API key is provided');
+        logger.warn(`Error validating Google Generative AI API key: ${message}`);
+        logger.warn('Google Generative AI functionality will be limited until a valid API key is provided');
       }
     } catch (error: unknown) {
       const message = error instanceof Error ? error.message : String(error);
       logger.warn(
-        `Google AI plugin configuration issue: ${message} - You need to configure the GOOGLE_GENERATIVE_AI_API_KEY in your environment variables`
+        `Google Generative AI plugin configuration issue: ${message} - You need to configure the GOOGLE_GENERATIVE_AI_API_KEY in your environment variables`
       );
     }
   })();
 }
+
+/**
+ * Alias for initialization function
+ */
+export const initializeGoogleGemini = initializeGoogleGenAI;

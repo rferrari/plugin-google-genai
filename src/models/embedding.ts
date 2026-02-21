@@ -1,6 +1,6 @@
 import type { IAgentRuntime, TextEmbeddingParams } from '@elizaos/core';
 import { logger, ModelType } from '@elizaos/core';
-import { createGoogleGenAI, getEmbeddingModel } from '../utils/config';
+import { createGoogleGemini, getEmbeddingModel } from '../utils/config';
 import { emitModelUsageEvent } from '../utils/events';
 import { countTokens } from '../utils/tokenization';
 
@@ -8,9 +8,9 @@ export async function handleTextEmbedding(
   runtime: IAgentRuntime,
   params: TextEmbeddingParams | string | null
 ): Promise<number[]> {
-  const genAI = createGoogleGenAI(runtime);
+  const genAI = createGoogleGemini(runtime);
   if (!genAI) {
-    throw new Error('Google Generative AI client not initialized');
+    throw new Error('Google Gemini client not initialized');
   }
 
   const embeddingModelName = getEmbeddingModel(runtime);
