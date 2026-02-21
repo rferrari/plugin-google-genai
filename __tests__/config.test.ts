@@ -19,43 +19,57 @@ vi.mock('@elizaos/core', () => ({
 const createMockRuntime = (env: Record<string, string>) => {
   return {
     getSetting: (key: string) => env[key],
-    emitEvent: () => {},
+    emitEvent: () => { },
     character: {
       system: 'You are a helpful assistant.',
     },
   } as unknown as any;
 };
 
-describe('Google GenAI Plugin Configuration', () => {
+describe('Google Generative AI Plugin Configuration', () => {
   beforeEach(() => {
     vi.clearAllMocks();
   });
 
   test('should warn when API key is missing', async () => {
-    // Create a mock runtime with no API key
-    const mockRuntime = createMockRuntime({});
+    // Temporarily clear env to force warning
+    const originalKey = process.env.GOOGLE_GEMINI_API_KEY;
+    const originalLegacyKey = process.env.GOOGLE_GENERATIVE_AI_API_KEY;
+    delete process.env.GOOGLE_GEMINI_API_KEY;
+    delete process.env.GOOGLE_GENERATIVE_AI_API_KEY;
 
-    // Initialize plugin
-    if (googleGenAIPlugin.init) {
-      await googleGenAIPlugin.init({}, mockRuntime);
+    try {
+      // Create a mock runtime with no API key
+      const mockRuntime = createMockRuntime({});
+
+      // Initialize plugin
+      if (googleGenAIPlugin.init) {
+        await googleGenAIPlugin.init({}, mockRuntime);
+      }
+
+      // Check that warning was logged
+      await vi.waitFor(() => {
+        expect(logger.warn).toHaveBeenCalledWith(
+          'GOOGLE_GENERATIVE_AI_API_KEY is not set in environment - Google AI functionality will be limited'
+        );
+      });
+    } finally {
+      // Restore env
+      if (originalKey) process.env.GOOGLE_GEMINI_API_KEY = originalKey;
+      if (originalLegacyKey) process.env.GOOGLE_GENERATIVE_AI_API_KEY = originalLegacyKey;
     }
-
-    // Check that warning was logged
-    expect(logger.warn).toHaveBeenCalledWith(
-      'GOOGLE_GENERATIVE_AI_API_KEY is not set in environment - Google AI functionality will be limited'
-    );
   });
 
   test('should initialize properly with valid API key', async () => {
     // Skip if no API key available for testing
-    if (!process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
-      console.warn('Skipping test: GOOGLE_GENERATIVE_AI_API_KEY not set');
+    if (!process.env.GOOGLE_GEMINI_API_KEY && !process.env.GOOGLE_GENERATIVE_AI_API_KEY) {
+      console.warn('Skipping test: GOOGLE_GEMINI_API_KEY not set');
       return;
     }
 
     // Create a mock runtime with API key
     const mockRuntime = createMockRuntime({
-      GOOGLE_GENERATIVE_AI_API_KEY: process.env.GOOGLE_GENERATIVE_AI_API_KEY,
+      GOOGLE_GEMINI_API_KEY: (process.env.GOOGLE_GEMINI_API_KEY || process.env.GOOGLE_GENERATIVE_AI_API_KEY) as string,
     });
 
     // Initialize plugin
@@ -63,19 +77,20 @@ describe('Google GenAI Plugin Configuration', () => {
       await googleGenAIPlugin.init({}, mockRuntime);
     }
 
-    // Give time for API key validation
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-
-    // Expect successful log message
-    expect(logger.log).toHaveBeenCalled();
+    // Expect successful log message using vi.waitFor to handle background async validation
+    await vi.waitFor(() => {
+      expect(logger.log).toHaveBeenCalledWith(
+        expect.stringContaining('Google Generative AI API key validated successfully')
+      );
+    }, { timeout: 5000 });
   });
 
   test('should use custom image model when configured', () => {
     // Create a mock runtime with custom model settings
-    const customImageModel = 'gemini-2.0-flash-002';
+    const customImageModel = 'gemini-3-flash';
     const mockRuntime = createMockRuntime({
       GOOGLE_IMAGE_MODEL: customImageModel,
-      GOOGLE_GENERATIVE_AI_API_KEY: 'test-key',
+      GOOGLE_GEMINI_API_KEY: 'test-key',
     });
 
     // Verify getSetting returns the custom image model
